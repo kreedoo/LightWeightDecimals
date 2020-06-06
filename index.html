@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>打造一个轻量级的JS精度解决方案</title>
+    </head>
+    <body>
+        <div id="app"></div>
+        <script src="./LightWeightDecimal.js"></script>
+        <script name="demo">
+            window.onload = function load(){
+                const result = [];
+                // 0.1 + 0.2
+                result.push(0.1 + 0.2);
+                result.push((0.1).plus(0.2));
+                console.log(result);
+                const domApp = document.getElementById('app');
+                domApp.innerHTML = result.map(item => `<div>${item}</div>`).join('\n');
+            };
+        </script>
+    </body>
+</html>
