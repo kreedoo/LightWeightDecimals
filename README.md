@@ -1,4 +1,4 @@
-# LightWeightDecimals.js
+# LightWeightDecimals
 
 一个轻量的低侵入式的JavaScript精度问题解决方案。
 
@@ -62,3 +62,5 @@
     a = (0.1).plus(0.2).divide(8).times(-3).round(3).abs();
 ```
 
+
+**注意：** 这里不仅提供了一份js版本的，同时还提供了一份ts版本的。
