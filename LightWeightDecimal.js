@@ -69,6 +69,37 @@ function calculate(type, numA, numB) {
     throw new Error(`unknown (${type}) operation!`);
 }
 /**
+ * 四舍五入
+ * @param {number} num 要四舍五入的数值
+ * @param {number} decimalsLength 保留多少位小数
+ * @param {number} flag = 5 表示：(flag - 1)舍flag入，如默认flag=5，表示4舍5入，如果flag=6，表示5舍6入
+ * @returns {number}
+ *
+ * roundOff(0.335, 2) => 0.34
+ * roundOff(0.335, 2, 6) => 0.33
+ */
+function roundOff(num, decimalsLength, flag = 5) {
+    const parsedNum = parseNumber(num);
+    const a = parsedNum.origion.split('.');
+    let decimals; // 目标小数部分
+    let lastDecimal; // 目标小数部分的末位
+    let diffValue; // 进1差值
+    if (a[1]) {
+        decimals = a[1].split('').slice(0, decimalsLength + 1);
+        if (decimals.length > decimalsLength) {
+            lastDecimal = Number(decimals.pop());
+            decimals = `${a[0]}.${decimals.join('')}`;
+            if (lastDecimal >= flag) {
+                diffValue = Number(`${decimals.replace(/\d/g, '0')}${(10).minus(lastDecimal)}`);
+                decimals = Number(`${decimals}${lastDecimal}`);
+                return decimals.plus(diffValue);
+            }
+            return Number(decimals);
+        }
+    }
+    return num;
+};
+/**
  * 加法运算
  * @param {number} num
  * @returns {number}
@@ -115,28 +146,9 @@ Number.prototype.divide = function divide(num) {
  *
  * (0.335).round(2) => 0.34
  * (0.335).round(2, 6) => 0.33
- * (0.335).round(2, 6) => 0.34
  */
 Number.prototype.round = function round(decimalsLength, flag = 5) {
-    const num = parseNumber(this.valueOf());
-    const a = num.origion.split('.');
-    let decimals;
-    let lastDecimal;
-    let diffValue;
-    if (a[1]) {
-        decimals = a[1].split('').slice(0, decimalsLength + 1);
-        if (decimals.length > decimalsLength) {
-            lastDecimal = Number(decimals.pop());
-            decimals = `${a[0]}.${decimals.join('')}`;
-            if (lastDecimal >= flag) {
-                diffValue = Number(`${decimals.replace(/\d/g, '0')}${(10).minus(lastDecimal)}`);
-                decimals = Number(`${decimals}${lastDecimal}`);
-                return decimals.plus(diffValue);
-            }
-            return Number(decimals);
-        }
-    }
-    return this.valueOf();
+    return roundOff(this.valueOf(), decimalsLength, flag);
 };
 /**
  * 取绝对值
